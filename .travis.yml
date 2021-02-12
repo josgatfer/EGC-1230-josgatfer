@@ -1,0 +1,19 @@
+language: python
+- "3.7"
+env:
+- DJANGO=2.0 DB=postgres
+services:
+  - postgresql
+addons:
+  postgresql: "9.6"
+global:
+  - PGPORT=5432
+before_script:
+ - psql -c "create user decide with password 'decide'"
+ - psql -c "create database decide owner decide"
+ - psql -U postgres -c "ALTER USER decide CREATEDB"
+install:
+- pip install -r requirements.txt
+script:
+- cd decide
+- python manage.py test store --keepdb
